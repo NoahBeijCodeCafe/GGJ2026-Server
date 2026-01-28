@@ -1,0 +1,23 @@
+{
+  "name": "ggj2026-server",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/NoahBeijCodeCafe/GGJ2026-Server#readme",
+  "bugs": {
+    "url": "https://github.com/NoahBeijCodeCafe/GGJ2026-Server/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NoahBeijCodeCafe/GGJ2026-Server.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "ws": "^8.19.0"
+  }
+}
