@@ -1,34 +1,35 @@
-// server.js
+// app.js
+import express from "express";
+import { createServer } from "http";
 import { WebSocketServer } from "ws";
 
-const PORT = process.env.PORT || 9080;
+const app = express();
+const server = createServer(app);
+const port = process.env.PORT || 10000;
 
-// Create a WebSocket server bound to all interfaces (0.0.0.0)
-const wss = new WebSocketServer({ port: PORT });
+// Serve an HTTP health endpoint (optional)
+app.get("/", (_req, res) => res.send("OK"));
+
+// Attach WS to the same server; use a path like /ws
+const wss = new WebSocketServer({ server, path: "/ws" });
 
 wss.on("connection", (ws, req) => {
-  const ip = req.socket.remoteAddress;
-  console.log(`Client connected from ${ip}`);
-
-  // Send a welcome message
+  console.log("WS client connected from", req.socket.remoteAddress);
   ws.send(
-    JSON.stringify({ type: "welcome", msg: "Hello from Node WS server" }),
+    JSON.stringify({ type: "welcome", msg: "Hello from Render WS server" }),
   );
 
-  // Echo messages back (and demonstrate JSON routing)
   ws.on("message", (data) => {
     const text = data.toString();
-    console.log(`Received: ${text}`);
+    console.log("Received:", text);
     ws.send(JSON.stringify({ type: "echo", payload: text }));
   });
 
   ws.on("close", (code, reason) => {
-    console.log(`Client disconnected: code=${code}, reason=${reason}`);
-  });
-
-  ws.on("error", (err) => {
-    console.error("WS error:", err);
+    console.log("WS closed:", code, reason.toString());
   });
 });
 
-console.log(`WebSocket server listening on ws://0.0.0.0:${PORT}`);
+server.listen(port, () => {
+  console.log(`HTTP+WS listening on port ${port}`);
+});
